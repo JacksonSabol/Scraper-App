@@ -31,8 +31,7 @@ app.engine("handlebars", exphbs({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
 
 // Import routes
-var routes = require('./routes/api-routes.js');
-app.use(routes);
+require("./routes/api-routes.js")(app);
 
 // Connect to the Mongo DB using flags to avoid deprecated methods
 mongoose.connect(MONGODB_URI, { useNewUrlParser: true, useCreateIndex: true });
