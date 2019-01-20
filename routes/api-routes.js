@@ -24,7 +24,7 @@ module.exports = function (app) {
                 res.json(err);
             });
     });
-    // Root route GET request for scraping data from TorrentFreak.com that then renders the results to a Handlebars template
+    // GET route for scraping data from TorrentFreak.com that then renders the results to a Handlebars template
     app.get("/scrape", function (req, res) {
         // Assign a variable to point to an empty array to push results to
         var resultsArray = [];
@@ -71,5 +71,39 @@ module.exports = function (app) {
             // Redirect to /articles route for testing
             res.redirect("/articles");
         });
+    });
+    // POST route for adding a Note to an article
+    app.post('/articles/:id', function (req, res) {
+        // Create a new note and pass the req.body to the entry
+        db.Note.create(req.body)
+            .then(function (dbNote) {
+                // If a Note was created successfully, find one Article with an `_id` equal to `req.params.id` 
+                // and push the new Note's _id to the Articles's `notes` array
+                return db.Article.findOneAndUpdate({ _id: req.params.id }, { $push: { notes: dbNote._id } }, { new: true });
+            })
+            .then(function (dbArticle) {
+                // If the Article was successfully updated, send it back to the client
+                res.json(dbArticle);
+            })
+            .catch(function (err) {
+                // If an error occurred, send it to the client
+                res.json(err);
+            });
+    });
+    // GET route for grabbing a specific Article by id and populating it with it's Notes
+    app.get("/articles/:id", function (req, res) {
+        // Using the id passed in the id parameter, prepare a query that finds the matching one in our db...
+        db.Article.findOne({ _id: req.params.id })
+            // ..and populate all of the notes associated with it
+            .populate("notes")
+            .then(function (dbArticle) {
+                // If the Article was successfully found, send it back to the client
+                console.log(dbArticle);
+                res.json(dbArticle);
+            })
+            .catch(function (err) {
+                // If an error occurred, send it to the client
+                res.json(err);
+            });
     });
 }
