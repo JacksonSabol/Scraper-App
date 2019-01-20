@@ -6,9 +6,11 @@ var Schema = mongoose.Schema;
 
 // Using the Schema constructor, create a new NoteSchema object
 var NoteSchema = new Schema({
-  // `title` is of type String
+  // `name` is of type String for the name of who leaves the note
+  name: String,
+  // `title` is of type String for the title of the note
   title: String,
-  // `body` is of type String
+  // `body` is of type String for the content of the note
   body: String
 });
 
