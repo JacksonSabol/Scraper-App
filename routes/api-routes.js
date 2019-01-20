@@ -7,6 +7,23 @@ var db = require("../models");
 
 // Export all routes for use in the server.js file
 module.exports = function (app) {
+    // Route for getting all Articles from the database
+    app.get("/articles", function (req, res) {
+        // Grab every document in the Articles collection
+        db.Article.find({})
+            .then(function (dbArticle) {
+                // Send all Articles back to the client for testing - Send to Handlebars template when set up
+                // var hbsObject = {
+                //     articles: resultsArray
+                // };
+                // res.render("index", hbsObject);
+                res.json(dbArticle);
+            })
+            .catch(function (err) {
+                // If an error occurred, send it to the client
+                res.json(err);
+            });
+    });
     // Root route GET request for scraping data from TorrentFreak.com that then renders the results to a Handlebars template
     app.get("/scrape", function (req, res) {
         // Assign a variable to point to an empty array to push results to
@@ -46,8 +63,13 @@ module.exports = function (app) {
                     });
             });
             // Send the resultsArray back to the client for testing - Send to Handlebars template when set up
+            // var hbsObject = {
+            //     articles: resultsArray
+            // };
             // res.render("index", hbsObject);
-            res.send(resultsArray);
+            // res.send(resultsArray);
+            // Redirect to /articles route for testing
+            res.redirect("/articles");
         });
     });
 }
