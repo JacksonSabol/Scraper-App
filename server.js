@@ -2,7 +2,6 @@
 var express = require("express");
 var exphbs = require('express-handlebars');
 var bodyParser = require('body-parser');
-// var path = require('path');
 var logger = require("morgan");
 var mongoose = require("mongoose");
 
@@ -12,7 +11,9 @@ var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/newsScraperDB"
 // Set mongoose to leverage built in JavaScript ES6 Promises
 mongoose.Promise = Promise;
 
+// Initialize Express
 var app = express();
+// Allow for PORT to be set by an environmental variable upon deployment
 var PORT = process.env.PORT || 3000;
 
 // Use morgan logger for logging requests
@@ -28,9 +29,6 @@ app.use(express.static("public"));
 // Set up app to use handlebars with a default layout of "main"
 app.engine("handlebars", exphbs({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
-
-// Import models
-// var db = require("./models");
 
 // Import routes
 var routes = require('./routes/api-routes.js');
