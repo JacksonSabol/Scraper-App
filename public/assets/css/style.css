@@ -1,29 +1,49 @@
 body {
-    background-color: #F2F6D0
+    /* Source: https://bluefx.net/after-effects-templates/3-free-animated-backgrounds-for-news/ */
+    background-image: url("../images/background.jpg");
+    background-size: 100%;
 }
-.scrape-button {
-    background-image: none;
-    background-color: blue;
-    color: black;
+
+h1, h2, h3, h4, h5 {
+    text-align: center;
+    color: white !important;
 }
-.scrape-button:hover {
-    background-color: green;
+
+p {
+    color: white !important;
 }
-#wrapper {
-    width: 960px;
-    margin-left: auto;
-    margin-right: auto;
-    padding-top: 5%;
+
+.article-link {
+    color: white;
 }
-#articles {
-    display: inline-block;
-    overflow: auto;
-    width: 60%;
-    height: 700px;
+
+.article-link:hover {
+    color: #9d9d9d;
 }
-#notes {
-    float: right;
-    width: 30%;
+
+/* Override the Bootstrap colors if desired
+.navbar,
+.navbar-inverse,
+.navbar-brand,
+.navbar-nav>li>a {
+    background: #;
+    color: # !important;
+    border: none;
+    border-radius: 0;
+}
+
+.navbar-inverse .navbar-nav>li>a:hover,
+.navbar-inverse .navbar-nav>li>a:focus,
+.navbar-inverse .navbar-nav>li>a:active {
+    background: #;
+    color: # !important;
+}
+*/
+
+.tagline {
+    color: #9d9d9d !important; 
+    font-style: italic;
+    font-size: 14px;
 }
 textarea, input {
     display: block;
