@@ -76,16 +76,24 @@ module.exports = function (app) {
     });
     // POST route for adding a Note to an article
     app.post('/articles/:id', function (req, res) {
+        // Log for testing
+        console.log("New Note Body: ", req.body);
         // Create a new note and pass the req.body to the entry
         db.Note.create(req.body)
             .then(function (dbNote) {
+                // Log for testing
+                console.log(dbNote);
                 // If a Note was created successfully, find one Article with an `_id` equal to `req.params.id` 
                 // and push the new Note's _id to the Articles's `notes` array
                 return db.Article.findOneAndUpdate({ _id: req.params.id }, { $push: { notes: dbNote._id } }, { new: true });
             })
             .then(function (dbArticle) {
                 // If the Article was successfully updated, send it back to the client
-                res.json(dbArticle);
+                // res.send(dbArticle);
+                // Log for testing
+                console.log("Server side POST a note: ", dbArticle);
+                // If the article was successfully updated, redirect to the torrentfreak articles route
+                res.redirect("/articles/torrentfreak");
             })
             .catch(function (err) {
                 // If an error occurred, send it to the client
@@ -101,7 +109,7 @@ module.exports = function (app) {
             .then(function (dbArticle) {
                 // If the Article was successfully found, send it back to the client
                 console.log(dbArticle);
-                res.json(dbArticle);
+                res.send(dbArticle);
             })
             .catch(function (err) {
                 // If an error occurred, send it to the client

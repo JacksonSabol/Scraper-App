@@ -18,13 +18,29 @@
                                 </div>
                             </td>
                             <td width="5%" align="center">
-                                <button type="submit" class="btn save-button" data-id="{{this.title}}"><span class="glyphicon glyphicon-plus-sign"></span></button>
-                                <button type="submit" class="btn view-notes" data-id="{{this.title}}"><span class="glyphicon glyphicon-comment"></span></button>
+                                <button type="button" class="btn save-button" data-id="{{this._id}}"><span class="glyphicon glyphicon-plus-sign"></span></button>
+                                <button type="button" class="btn view-notes" data-id="{{this._id}}"><span class="glyphicon glyphicon-comment"></span></button>
                             </td>
                         </tr>
                     </table>
                 </div>
             </div>
+        </div>
+    </div>
+    <div class="container note-section">
+        <div class="row container-fluid panel-body">
+            <h4>Notes:</h4>
+            <span class="existing-notes"></span>
+        </div>
+        <div class="row container-fluid panel-body">
+            <form class="note-form">
+                <div class="form-group">
+                    <input type="text" id="name-input{{this._id}}" data-id="{{this._id}}" class="name-input" name="name" placeholder="Your Name" onfocus="this.placeholder = ''">
+                    <input type="text" id="title-input{{this._id}}" data-id="{{this._id}}" class="title-input" name="title" placeholder="Note Title" onfocus="this.placeholder = ''">
+                    <input type="text" id="note-input{{this._id}}" data-id="{{this._id}}" class="note-input" name="note" placeholder="What did you think of the article?" onfocus="this.placeholder = ''">
+                </div>
+                <button class="btn post-note" data-id="{{this._id}}" type="button">Save Note</button>
+            </form>
         </div>
     </div>
     {{/each}}
