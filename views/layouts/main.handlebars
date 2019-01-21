@@ -6,12 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Tech News | See the Latest</title>
     {{!-- Font Awesome --}}
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/"
+        crossorigin="anonymous">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
     {{!-- Google Fonts --}}
-    {{!--  --}}
+    {{!-- --}}
     <link rel="stylesheet" href="/assets/css/style.css" type="text/css">
     <script src="/assets/javascript/app.js"></script>
 </head>
@@ -30,8 +31,16 @@
             <div class="collapse navbar-collapse" id="myNavbar">
                 <ul class="nav navbar-nav">
                     <li><a href="/">Home</a></li>
-                    <li><a href="/scrape/torrentfreak">Scrape</a></li>
-                    <li><a href="/articles/torrentfreak">Display</a></li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false">TorrentFreak.com<span class="caret"></span></a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <a class="dropdown-item" href="/articles/torrentfreak">Display Articles</a><br>
+                            <a class="dropdown-item" href="/scrape/torrentfreak">Scrape New Articles</a>
+                        </div>
+                    </li>
+                    {{!-- <li><a href="/scrape/torrentfreak">Scrape</a></li>
+                    <li><a href="/articles/torrentfreak">Display</a></li> --}}
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <p class="tagline">A place to collate and comment on all your favorite tech news articles</p>

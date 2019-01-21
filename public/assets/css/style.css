@@ -2,9 +2,10 @@ body {
     /* Source: https://bluefx.net/after-effects-templates/3-free-animated-backgrounds-for-news/ */
     background-image: url("../images/background.jpg");
     background-size: 100%;
+    background-attachment: fixed;
 }
 
-h1, h2, h3, h4, h5 {
+h1, h2, h4, h5 {
     text-align: center;
     color: white !important;
 }
@@ -19,6 +20,35 @@ p {
 
 .article-link:hover {
     color: #9d9d9d;
+}
+
+.article-image {
+    width: 200px;
+    border-radius: 0.5rem;
+    float: left;
+    margin-right: 20px;
+}
+
+.glyphicon {
+    font-size: 25px;
+    color: #222222;
+}
+
+.glyphicon:hover {
+    font-size: 25px;
+    color: #444444;
+}
+
+.save-button {
+    border-style: none;
+    background: none;
+}
+
+.save-button:hover,
+.save-button:focus,
+.save-button:active {
+    border-style: none;
+    background: none;
 }
 
 /* Override the Bootstrap colors if desired
@@ -39,6 +69,42 @@ p {
     color: # !important;
 }
 */
+
+.container {
+    width: 100%;
+    max-width: 90%;
+    margin: 0 auto;
+    /* clear: both; */
+}
+
+.panel-primary {
+    border-color: #444444;
+}
+
+.panel {
+    margin-bottom: 21px;
+    background-color: #9d9d9d;
+    border: 1px solid transparent;
+    border-radius: 0.5rem;
+    border-color: #444444;
+}
+
+.panel-body {
+    padding: 15px;
+}
+
+.panel-title {
+    margin-top: 0;
+    margin-bottom: 0;
+    font-size: 17px;
+}
+
+.panel>.panel-heading {
+    color: #ffffff;
+    background-image: none;
+    background-color: #222222;
+    border-color: #444444;
+}
 
 .tagline {
     color: #9d9d9d !important; 

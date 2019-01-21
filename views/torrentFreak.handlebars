@@ -1,8 +1,30 @@
-<div id="wrapper">
+<div class="container">
     <h1>The Latest on TorrentFreak.com</h1>
     {{#each articles}}
-    <img src="{{this.image}}"><br>
-    <a href="{{this.link}}" class="article-link" target="_blank">{{this.title}}</a>
-    <p>{{this.summary}}</p>
+    <div class="row">
+        <div class="col-sm-12">
+            <br>
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><strong><a href="{{this.link}}" class="article-link" target="_blank">{{this.title}}</a></strong></h3>
+                </div>
+                <div class="panel-body">
+                    <table width="100%">
+                        <tr class="table-row-list" width="100%">
+                            <td width="95%">
+                                <div>
+                                    <img src="{{this.image}}" class="article-image">
+                                    <p>{{this.summary}}</p>
+                                </div>
+                            </td>
+                            <td width="5%" align="center">
+                                <button type="submit" class="btn btn-default save-button"><span class="glyphicon glyphicon-plus-sign"></span></button>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
     {{/each}}
 </div>
