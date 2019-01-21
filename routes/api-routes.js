@@ -7,17 +7,23 @@ var db = require("../models");
 
 // Export all routes for use in the server.js file
 module.exports = function (app) {
-    // Route for getting all Articles from the database
-    app.get("/articles", function (req, res) {
-        // Grab every document in the Articles collection
-        db.Article.find({})
-            .then(function (dbArticle) {
-                // Send all Articles back to the client for testing - Send to Handlebars template when set up
-                // var hbsObject = {
-                //     articles: resultsArray
-                // };
-                // res.render("index", hbsObject);
-                res.json(dbArticle);
+    // Root route to render home page
+    app.get("/", function (req, res) {
+        // Assign a blank object to send to index.handlebars
+        var hbsObject = {};
+        res.render("index", hbsObject);
+    });
+    // Route for getting all TorrentFreak Articles from the database
+    app.get("/articles/torrentfreak", function (req, res) {
+        // Grab every document in the Articles collection where the source is "Torrent Freak"
+        db.Article.find({ source: "Torrent Freak" })
+            .then(function (dbArticles) {
+                // Assign a key on a handlebars object to hold the dbArticles
+                var hbsObject = {
+                    articles: dbArticles
+                };
+                // Render the handlebars object to the torrentFreak.handlebars template
+                res.render("torrentFreak", hbsObject);
             })
             .catch(function (err) {
                 // If an error occurred, send it to the client
@@ -25,7 +31,7 @@ module.exports = function (app) {
             });
     });
     // GET route for scraping data from TorrentFreak.com that then renders the results to a Handlebars template
-    app.get("/scrape", function (req, res) {
+    app.get("/scrape/torrentfreak", function (req, res) {
         // Assign a variable to point to an empty array to push results to
         var resultsArray = [];
         // Make a "request" for the "Latest" section of TorrentFreak.com
@@ -49,8 +55,8 @@ module.exports = function (app) {
                 var imageRoute = styleContent.split("'");
                 // Concatenate the image source with the base URL, then save it as the image key on the result object
                 result.image = "https://torrentfreak.com" + imageRoute[1];
-                // Push each result object to the resultsArray after passing Database valdations
-                resultsArray.push(result);
+                // Assign the source property to "Torrent Freak" as we're scraping from Torrent Freak on this route
+                result.source = "Torrent Freak";
                 // Create a new Article using the `result` object built from scraping
                 db.Article.create(result)
                     .then(function (dbArticle) {
@@ -62,14 +68,8 @@ module.exports = function (app) {
                         console.log(err);
                     });
             });
-            // Send the resultsArray back to the client for testing - Send to Handlebars template when set up
-            // var hbsObject = {
-            //     articles: resultsArray
-            // };
-            // res.render("index", hbsObject);
-            // res.send(resultsArray);
-            // Redirect to /articles route for testing
-            res.redirect("/articles");
+            // Redirect to /articles/torrentfreak GET route to display Articles
+            res.redirect("/articles/torrentfreak");
         });
     });
     // POST route for adding a Note to an article

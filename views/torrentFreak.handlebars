@@ -1,0 +1,9 @@
+<div id="wrapper">
+    <h1>The Latest on TorrentFreak.com</h1>
+    <h2><i>Click on the <button type="button" class="btn btn-dark">Refresh</button> button to check for new articles</i></h2>
+    {{#each articles}}
+    <img src="{{this.image}}"><br>
+    <a href="{{this.link}}" target="_blank">{{this.title}}</a><br>
+    <p>{{this.summary}}</p>
+    {{/each}}
+</div>
