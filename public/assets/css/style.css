@@ -22,6 +22,38 @@ p {
     color: #9d9d9d;
 }
 
+.published-date {
+    float: right;
+}
+
+.dropdown-menu {
+    border: 0;
+    padding: 0;
+    line-height: 0;
+}
+
+.dropdown-item {
+    background-image: none;
+    background-color: #222222;
+    color: #9d9d9d;
+    text-decoration: none;
+    position: relative;
+    display: block;
+    padding: 15px;
+}
+
+.dropdown-item:hover,
+.dropdown-item:active,
+.dropdown-item:focus {
+    background-image: none;
+    background-color: #080808;
+    color: white;
+    text-decoration: none;
+    position: relative;
+    display: block;
+    padding: 15px;
+}
+
 .article-image {
     width: 200px;
     border-radius: 0.5rem;
@@ -47,6 +79,18 @@ p {
 .save-button:hover,
 .save-button:focus,
 .save-button:active {
+    border-style: none;
+    background: none;
+}
+
+.view-notes {
+    border-style: none;
+    background: none;
+}
+
+.view-notes:hover,
+.view-notes:focus,
+.view-notes:active {
     border-style: none;
     background: none;
 }

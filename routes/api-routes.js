@@ -16,7 +16,7 @@ module.exports = function (app) {
     // Route for getting all TorrentFreak Articles from the database
     app.get("/articles/torrentfreak", function (req, res) {
         // Grab every document in the Articles collection where the source is "Torrent Freak"
-        db.Article.find({ source: "Torrent Freak" })
+        db.Article.find({ source: "Torrent Freak" }).sort({ pubdatesort:-1 })
             .then(function (dbArticles) {
                 // Assign a key on a handlebars object to hold the dbArticles
                 var hbsObject = {
@@ -32,8 +32,6 @@ module.exports = function (app) {
     });
     // GET route for scraping data from TorrentFreak.com that then renders the results to a Handlebars template
     app.get("/scrape/torrentfreak", function (req, res) {
-        // Assign a variable to point to an empty array to push results to
-        var resultsArray = [];
         // Make a "request" for the "Latest" section of TorrentFreak.com
         request("https://torrentfreak.com/", function (error, response, HTML) {
             // Load the HTML body from "request" into cheerio and save it to $ for a shorthand selector
@@ -57,6 +55,10 @@ module.exports = function (app) {
                 result.image = "https://torrentfreak.com" + imageRoute[1];
                 // Assign the source property to "Torrent Freak" as we're scraping from Torrent Freak on this route
                 result.source = "Torrent Freak";
+                // Isolate the text of the publication date and assign it to the result object
+                result.pubdate = $(this).find("time").text();
+                // Isolate the value of the publication datetime and assign it to the result object for sorting
+                result.pubdatesort = $(this).find("time").attr("datetime");
                 // Create a new Article using the `result` object built from scraping
                 db.Article.create(result)
                     .then(function (dbArticle) {
