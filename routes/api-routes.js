@@ -125,9 +125,22 @@ module.exports = function (app) {
             });
     });
     // PUT route for adding an Article to the Saved page
-    app.put('/articles/:id', function (req, res) {
+    app.put('/save/articles/:id', function (req, res) {
         // Find the Article to be saved by _id passed in the :id parameter, then set the value of 'saved' to 'true'
         db.Article.findOneAndUpdate({ _id: req.params.id }, { $set: { saved: true } })
+            .then(function (dbArticle) {
+                // If the Article was successfully updated, send it back to the client
+                res.json(dbArticle);
+            })
+            .catch(function (err) {
+                // If an error occurred, send it to the client
+                res.json(err);
+            });
+    });
+    // PUT route for removing an Article from the Saved page
+    app.put('/unsave/articles/:id', function (req, res) {
+        // Find the Article to be saved by _id passed in the :id parameter, then set the value of 'saved' to 'true'
+        db.Article.findOneAndUpdate({ _id: req.params.id }, { $set: { saved: false } })
             .then(function (dbArticle) {
                 // If the Article was successfully updated, send it back to the client
                 res.json(dbArticle);

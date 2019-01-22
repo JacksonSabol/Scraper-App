@@ -131,9 +131,24 @@ $(document).ready(function () {
         // Make an Ajax call to update the Article
         $.ajax({
             method: "PUT",
-            url: "/articles/" + articleID,
+            url: "/save/articles/" + articleID,
         }).then(function (data) {
             // Redirect to Saved Articles page
+            window.location.replace("/articles/saved");
+        });
+    });
+    // Remove an Article from the Saved page when unsave-button is clicked
+    $("body").on("click", ".unsave-button", function (event) {
+        // Prevent default action
+        event.preventDefault();
+        // Assign a variable to hold the Article _id of the Article 'unsaved'
+        var articleID = $(this).data("id");
+        // Make an Ajax call to update the Article
+        $.ajax({
+            method: "PUT",
+            url: "/unsave/articles/" + articleID,
+        }).then(function (data) {
+            // HTTP Redirect to Saved Articles page
             window.location.replace("/articles/saved");
         });
     });
