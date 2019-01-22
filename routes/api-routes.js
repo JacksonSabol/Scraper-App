@@ -76,13 +76,9 @@ module.exports = function (app) {
     });
     // POST route for adding a Note to an article
     app.post('/articles/:id', function (req, res) {
-        // Log for testing
-        console.log("New Note Body: ", req.body);
         // Create a new note and pass the req.body to the entry
         db.Note.create(req.body)
             .then(function (dbNote) {
-                // Log for testing
-                console.log(dbNote);
                 // If a Note was created successfully, find one Article with an `_id` equal to `req.params.id` 
                 // and push the new Note's _id to the Articles's `notes` array
                 return db.Article.findOneAndUpdate({ _id: req.params.id }, { $push: { notes: dbNote._id } }, { new: true });
@@ -90,8 +86,6 @@ module.exports = function (app) {
             .then(function (dbArticle) {
                 // If the Article was successfully updated, send it back to the client
                 res.json(dbArticle);
-                // Log for testing
-                console.log("Server side POST a note: ", dbArticle);
             })
             .catch(function (err) {
                 // If an error occurred, send it to the client
@@ -106,7 +100,6 @@ module.exports = function (app) {
             .populate("notes")
             .then(function (dbArticle) {
                 // If the Article was successfully found, send it back to the client
-                console.log(dbArticle);
                 res.json(dbArticle);
             })
             .catch(function (err) {
@@ -119,8 +112,6 @@ module.exports = function (app) {
         // Using the _id passed in the :id parameter, prepare a query that finds the matching one in the db...
         db.Note.findOneAndDelete({ _id: req.params.id })
             .then(function (dbNote) {
-                // Log for testing to see what comes back - object of deleted Note
-                console.log(dbNote);
                 // Return deleted Note object to client
                 res.json(dbNote)
             });

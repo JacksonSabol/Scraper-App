@@ -11,7 +11,7 @@ $(document).ready(function () {
         var toggleID = "#note-toggle" + $(this).data("id");
         // Use slideToggle to animate the note form - http://api.jquery.com/slidetoggle/
         $(toggleID).slideToggle();
-        // Pass the articleID and thisBtn to the getNotes function
+        // Pass the articleID to the getNotes function
         getNotes(articleID);
     });
     // POST a new Note when a post-note button is clicked
@@ -40,8 +40,8 @@ $(document).ready(function () {
                     body: $(inputNote).val()
                 }
             }).then(function (data) {
-                // Pass the article _id and thisBtn to the getNotes function
-                getNotes(articleID, thisBtn);
+                // Pass the article _id to the getNotes function
+                getNotes(articleID);
             });
         }
         // Empty the input fields once the Note has been saved
@@ -56,17 +56,15 @@ $(document).ready(function () {
         event.preventDefault();
         // Assign a variable to hold the data-id of the note in question
         var noteID = $(this).data("id");
-        // Assign a variable to point to the attributes of the button clicked - testing
-        var thisBtn = $(this);
+        // Assign a variable to hold the Article _id of the note in question
+        var articleID = $(this).data("articleid");
+        // Make an Ajax call to delete the Note
         $.ajax({
             method: "DELETE",
             url: "/notes/delete/" + noteID,
         }).then(function (data) {
-            // Log for testing - should be same as query which is info about deleted note
-            console.log(data); // Uncomment back in once sending data
-            console.log("Remove button: ", thisBtn);
-            // Log what's above thisBtn
-            console.log("Remove button parent: ", thisBtn.parent());
+            // Pass the articleID to the getNotes function to display the updated Notes
+            getNotes(articleID);
         });
     });
     // Function to get any Notes for an Article
@@ -102,6 +100,8 @@ $(document).ready(function () {
                     $noteBody.append("Note: " + notes[i].body).addClass("note-text");
                     // Assign a variable to dynamically generate a 'remove note' button with a class for styling
                     var $removeButton = $("<button type='button'>").addClass("btn remove-note");;
+                    // Add articleID as a data- attribute to the removeButton
+                    $removeButton.attr("data-articleid", articleID);
                     // Assign a variable to dynamically generate a span to hold a trash-can Glyphicon icon
                     var $removeSpan = $("<span>").addClass("glyphicon glyphicon-trash");
                     // Add a data-id to the removeButton equal to the note _id
