@@ -13,6 +13,23 @@ module.exports = function (app) {
         var hbsObject = {};
         res.render("index", hbsObject);
     });
+    // GET route to render Saved page
+    app.get("/articles/saved", function (req, res) {
+        // Grab every document in the Articles collection where the value of 'saved' is 'true' - sort by publication date
+        db.Article.find({ saved: true }).sort({ pubdatesort: -1 })
+            .then(function (dbArticles) {
+                // Assign a key on a handlebars object to hold the dbArticles
+                var hbsObject = {
+                    articles: dbArticles
+                };
+                // Render the handlebars object to the saved.handlebars template
+                res.render("saved", hbsObject);
+            })
+            .catch(function (err) {
+                // If an error occurred, send it to the client
+                res.json(err);
+            });
+    });
     // Route for getting all TorrentFreak Articles from the database
     app.get("/articles/torrentfreak", function (req, res) {
         // Grab every document in the Articles collection where the source is "Torrent Freak"
@@ -100,6 +117,19 @@ module.exports = function (app) {
             .populate("notes")
             .then(function (dbArticle) {
                 // If the Article was successfully found, send it back to the client
+                res.json(dbArticle);
+            })
+            .catch(function (err) {
+                // If an error occurred, send it to the client
+                res.json(err);
+            });
+    });
+    // PUT route for adding an Article to the Saved page
+    app.put('/articles/:id', function (req, res) {
+        // Find the Article to be saved by _id passed in the :id parameter, then set the value of 'saved' to 'true'
+        db.Article.findOneAndUpdate({ _id: req.params.id }, { $set: { saved: true } })
+            .then(function (dbArticle) {
+                // If the Article was successfully updated, send it back to the client
                 res.json(dbArticle);
             })
             .catch(function (err) {

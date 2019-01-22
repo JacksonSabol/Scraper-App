@@ -122,4 +122,19 @@ $(document).ready(function () {
             }
         });
     }
+    // Save an Article when save-button is clicked
+    $("body").on("click", ".save-button", function (event) {
+        // Prevent default action
+        event.preventDefault();
+        // Assign a variable to hold the Article _id of the Article 'saved'
+        var articleID = $(this).data("id");
+        // Make an Ajax call to update the Article
+        $.ajax({
+            method: "PUT",
+            url: "/articles/" + articleID,
+        }).then(function (data) {
+            // Redirect to Saved Articles page
+            window.location.replace("/articles/saved");
+        });
+    });
 });

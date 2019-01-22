@@ -83,6 +83,18 @@ p {
     background: none;
 }
 
+.unsave-button {
+    border-style: none;
+    background: none;
+}
+
+.unsave-button:hover,
+.unsave-button:focus,
+.unsave-button:active {
+    border-style: none;
+    background: none;
+}
+
 .view-notes {
     border-style: none;
     background: none;
@@ -132,7 +144,6 @@ p {
     width: 100%;
     max-width: 90%;
     margin: 0 auto;
-    /* clear: both; */
 }
 
 .panel-primary {
@@ -210,7 +221,6 @@ p {
 .note-title,
 .note-text {
     color: white !important;
-    /* background-color: #9d9d9d; */
 }
 
 .note-form {
