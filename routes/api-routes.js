@@ -16,7 +16,7 @@ module.exports = function (app) {
     // Route for getting all TorrentFreak Articles from the database
     app.get("/articles/torrentfreak", function (req, res) {
         // Grab every document in the Articles collection where the source is "Torrent Freak"
-        db.Article.find({ source: "Torrent Freak" }).sort({ pubdatesort:-1 })
+        db.Article.find({ source: "Torrent Freak" }).sort({ pubdatesort: -1 })
             .then(function (dbArticles) {
                 // Assign a key on a handlebars object to hold the dbArticles
                 var hbsObject = {
@@ -89,11 +89,9 @@ module.exports = function (app) {
             })
             .then(function (dbArticle) {
                 // If the Article was successfully updated, send it back to the client
-                // res.send(dbArticle);
+                res.json(dbArticle);
                 // Log for testing
                 console.log("Server side POST a note: ", dbArticle);
-                // If the article was successfully updated, redirect to the torrentfreak articles route
-                res.redirect("/articles/torrentfreak");
             })
             .catch(function (err) {
                 // If an error occurred, send it to the client
@@ -102,18 +100,29 @@ module.exports = function (app) {
     });
     // GET route for grabbing a specific Article by id and populating it with it's Notes
     app.get("/articles/:id", function (req, res) {
-        // Using the id passed in the id parameter, prepare a query that finds the matching one in our db...
+        // Using the id passed in the id parameter, prepare a query that finds the matching one in the db...
         db.Article.findOne({ _id: req.params.id })
             // ..and populate all of the notes associated with it
             .populate("notes")
             .then(function (dbArticle) {
                 // If the Article was successfully found, send it back to the client
                 console.log(dbArticle);
-                res.send(dbArticle);
+                res.json(dbArticle);
             })
             .catch(function (err) {
                 // If an error occurred, send it to the client
                 res.json(err);
+            });
+    });
+    // DELETE route for deleting a Note
+    app.delete("/notes/delete/:id", function (req, res) {
+        // Using the _id passed in the :id parameter, prepare a query that finds the matching one in the db...
+        db.Note.findOneAndDelete({ _id: req.params.id })
+            .then(function (dbNote) {
+                // Log for testing to see what comes back - object of deleted Note
+                console.log(dbNote);
+                // Return deleted Note object to client
+                res.json(dbNote)
             });
     });
 }

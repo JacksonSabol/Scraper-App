@@ -95,6 +95,20 @@ p {
     background: none;
 }
 
+.remove-note {
+    float: right;
+    border-style: none;
+    background: none;
+}
+
+.remove-note:hover,
+.remove-note:focus,
+.remove-note:active {
+    float: right;
+    border-style: none;
+    background: none;
+}
+
 /* Override the Bootstrap colors if desired
 .navbar,
 .navbar-inverse,
@@ -156,22 +170,51 @@ p {
     font-size: 14px;
 }
 
+.note-section {
+    clear: both;
+    margin-top: 5px;
+    border: 2px solid #222222;
+    border-radius: 0.5rem;
+    width: 95%;
+    margin: auto;
+    background: #444444;
+}
+
+.name-input,
+.title-input,
+.note-input {
+    border-style: none;
+    border: 1px solid #222222;
+    border-radius: 0.5rem;
+    padding: 5px;
+    margin-bottom: 5px;
+}
+
+.note-input {
+    width: 100%;
+    height: 80px;
+}
+
+.note-content {
+    border: 1px solid #222222;
+    border-radius: 0.5rem;
+    font-style: oblique;
+    padding: 20px;
+    background: #9d9d9d;
+    width: 75%;
+    margin: auto;
+    margin-top:2px;
+}
+
+.note-name,
+.note-title,
+.note-text {
+    color: white !important;
+    /* background-color: #9d9d9d; */
+}
+
 .note-form {
     width: 75%;
     margin: 0;
     padding-top: 50px;
-}
-
-textarea, input {
-    display: block;
-    width: 100%;
-    background-color: #FCF5C7;
-}
-input {
-    height: 36px;
-    font-size: 24px;
-}
-textarea {
-    height: 200px;
-    font-size: 18px;
 }

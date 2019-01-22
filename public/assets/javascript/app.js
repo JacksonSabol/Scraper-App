@@ -7,20 +7,17 @@ $(document).ready(function () {
         event.preventDefault();
         // Isolate the article _id from the data-id of the button clicked
         var articleID = $(this).data("id");
+        // Assign a variable to hold the div id concatenated with the unique article _id
+        var toggleID = "#note-toggle" + $(this).data("id");
         // Use slideToggle to animate the note form - http://api.jquery.com/slidetoggle/
-        $(".note-section").slideToggle();
-        // Pass the articleID to the getNotes function
+        $(toggleID).slideToggle();
+        // Pass the articleID and thisBtn to the getNotes function
         getNotes(articleID);
     });
-    // POST a new Note when the post-note button is clicked
-    $(".post-note").on("click", function () {
+    // POST a new Note when a post-note button is clicked
+    $(".post-note").on("click", function (event) {
         // Prevent default action
         event.preventDefault();
-
-        // Edge case in the future
-        // Isolate this button to pass to getNotes function
-        // var thisBtn = $(this);
-
         // Assign variables to hold the unique article _id from the input fields and concatenate with the #id of each input field
         // These values are coded into the input tags in the handlebars template
         var inputName = "#name-input" + $(this).data("id");
@@ -43,8 +40,8 @@ $(document).ready(function () {
                     body: $(inputNote).val()
                 }
             }).then(function (data) {
-                // Pass the article _id to the getNotes function
-                getNotes(articleID);
+                // Pass the article _id and thisBtn to the getNotes function
+                getNotes(articleID, thisBtn);
             });
         }
         // Empty the input fields once the Note has been saved
@@ -52,36 +49,37 @@ $(document).ready(function () {
         $(inputTitle).val("");
         $(inputNote).val("");
     });
+    // DELETE a note when a remove-note button is clicked
+    // $(".remove-note").on("click", function (event) { // For some reason this does not work; had to switch to other method
+    $(document).on('click', '.remove-note', function (event) {
+        // Prevent default action
+        event.preventDefault();
+        // Assign a variable to hold the data-id of the note in question
+        var noteID = $(this).data("id");
+        // Assign a variable to point to the attributes of the button clicked - testing
+        var thisBtn = $(this);
+        $.ajax({
+            method: "DELETE",
+            url: "/notes/delete/" + noteID,
+        }).then(function (data) {
+            // Log for testing - should be same as query which is info about deleted note
+            console.log(data); // Uncomment back in once sending data
+            console.log("Remove button: ", thisBtn);
+            // Log what's above thisBtn
+            console.log("Remove button parent: ", thisBtn.parent());
+        });
+    });
     // Function to get any Notes for an Article
-    function getNotes(articleID) {
+    var getNotes = function (articleID) {
+        // Assign a variable to hold the existing-notes span id concatenated with the unique Article _id
+        var spanID = "#existing-notes" + articleID;
+        // Empty to Article-specific span before re-populating it after the Ajax call - prevent duplicate notes appended to span
+        $(spanID).empty();
         // Make an Ajax call to GET any Notes associated with the Article passed to the function
         $.ajax({
             method: "GET",
             url: "/articles/" + articleID
         }).then(function (data) {
-
-            // Edge case in the future
-            // // Assign a variable to receive content depending on which button was clicked
-            // var notesDiv = "";
-            // // If the view-notes button is clicked...
-            // if (thisButton.hasClass("view-notes")) {
-            //     // Assign notesDiv to the span with a class of existing-notes - https://api.jquery.com/eq/
-            //     notesDiv = thisButton.parents().eq(0).find(".existing-notes");
-            // }
-            // // Otherwise, if the post-note button is clicked...
-            // else if (thisButton.hasClass("post-note")) {
-            //     // Assign notesDiv to the the span with a class of existing-notes
-            //     notesDiv = thisButton.parents().eq(0).find(".existing-notes");
-
-            // }
-            // // Otherwise, prevent displaying articles unrelated to a button on the page
-            // else {
-            //     console.log("Error: unknown button");
-            // }
-            // console.log("notesDiv test: ", notesDiv);
-
-            // Log for testing
-            console.log("Notes Data Returned: ", data.notes);
             // Assign a variable to hold the Notes associated with the Article
             var notes = data.notes;
             // If there are existing Notes, display them along with a 'remove note' button
@@ -97,29 +95,29 @@ $(document).ready(function () {
                     // Assign a variable to dynamically generate a div tag to hold the note content
                     var $noteBody = $("<div>");
                     // Append the name associated with each Note to the $name div and add a class for styling
-                    $name.append("Note Author: " + notes[i].name).addClass("note-name");
+                    $name.append("Author: " + notes[i].name).addClass("note-name");
                     // Append the title associated with each Note to the $title div and add a class for styling
-                    $title.append(notes[i].title + ": ").addClass("note-title");
+                    $title.append("Title: " + notes[i].title).addClass("note-title");
                     // Append the Note content associated with each Note to the $noteBody div and add a class for styling
-                    $noteBody.append(notes[i].body).addClass("note-text");
-                    // Append the $name associated with each note to the $notes div
-                    $notes.append($name);
-                    // Append the $title associated with each note to the $notes div
-                    $notes.append($title);
+                    $noteBody.append("Note: " + notes[i].body).addClass("note-text");
                     // Assign a variable to dynamically generate a 'remove note' button with a class for styling
-                    var $removeButton = $("<button>").addClass("remove-note");;
+                    var $removeButton = $("<button type='button'>").addClass("btn remove-note");;
                     // Assign a variable to dynamically generate a span to hold a trash-can Glyphicon icon
                     var $removeSpan = $("<span>").addClass("glyphicon glyphicon-trash");
                     // Add a data-id to the removeButton equal to the note _id
                     $removeButton.attr("data-id", notes[i]._id);
                     // Append the Glyphicon span to the removeButton
                     $removeButton.append($removeSpan);
-                    // Append the removeButton to the $noteBody
-                    $noteBody.append($removeButton);
+                    // Append the removeButton to the name div
+                    $name.append($removeButton);
+                    // Append the $name associated with each note to the $notes div
+                    $notes.append($name);
+                    // Append the $title associated with each note to the $notes div
+                    $notes.append($title);
                     // Append the $noteBody to the entire Note div
                     $notes.append($noteBody);
-                    // Append the entire Note to the existing-notes span
-                    $(".existing-notes").append($notes);
+                    // Append the entire Note to the Article-specific existing-notes span - Line 
+                    $(spanID).append($notes);
                 }
             }
         });
