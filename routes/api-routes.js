@@ -20,7 +20,7 @@ module.exports = function (app) {
             .then(function (dbArticles) {
                 // Assign a key on a handlebars object to hold the dbArticles
                 var hbsObject = {
-                    articles: dbArticles
+                    articles: dbArticles.map(article => article.toJSON())
                 };
                 // Render the handlebars object to the saved.handlebars template
                 res.render("saved", hbsObject);
@@ -37,7 +37,7 @@ module.exports = function (app) {
             .then(function (dbArticles) {
                 // Assign a key on a handlebars object to hold the dbArticles
                 var hbsObject = {
-                    articles: dbArticles
+                    articles: dbArticles.map(article => article.toJSON())
                 };
                 // Render the handlebars object to the torrentFreak.handlebars template
                 res.render("torrentFreak", hbsObject);
@@ -54,28 +54,32 @@ module.exports = function (app) {
             // Load the HTML body from "request" into cheerio and save it to $ for a shorthand selector
             var $ = cheerio.load(HTML);
             // Grab everything with a class of "entry-contents" - all <div> tags for the "Latest" section have this class
-            $(".entry-contents").each(function (i, element) {
+            $(".preview-article ").each(function (i, element) {
                 // Save an empty result object
                 var result = {};
                 // Grab the text of every <h1> tag wrapped in every <a> tag and save it as the title key on the 'result' object
-                result.title = $(this).find("h1").text();
+                result.title = $(this).find(".preview-article__title").text();
                 // Grab the href of every <a> tag and save it as the link key on the 'result' object
-                result.link = "https://torrentfreak.com" + $(this).find("a").attr("href");
+                result.link = $(this).find("a").attr("href");
                 // Grab the text of every <p> tag and save it as the summary key on the 'result' object
-                result.summary = $(this).find("p").text();
-                // Grab the content of the <div> attribute "style" from every tag with a class of .entry-image
-                // Parse from: style=" background-image: url('/images/computerkeyboardfeat-500x210.png') "
-                var styleContent = $(this).find($(".entry-image")).attr("style");
+                result.summary = $(this).find(".preview-article__excerpt").text();
+                // Grab the image source from the datacfsrc attribute sent in the TorrentFreak response HTML
+                result.image = $(this).find(".preview-article__photo").attr("data-cfsrc");
+
+                /**
+                 * Deprecated from TorrentFreak's switch to SASS
+                 */
                 // Split the string styleContent by (" ' ") to isolate the image source - img src at index 1
-                var imageRoute = styleContent.split("'");
+                // var imageRoute = styleContent.split("'");
                 // Concatenate the image source with the base URL, then save it as the image key on the result object
-                result.image = "https://torrentfreak.com" + imageRoute[1];
+                // result.image = "https://torrentfreak.com" + imageRoute[1];
+
                 // Assign the source property to "Torrent Freak" as we're scraping from Torrent Freak on this route
                 result.source = "Torrent Freak";
                 // Isolate the text of the publication date and assign it to the result object
                 result.pubdate = $(this).find("time").text();
-                // Isolate the value of the publication datetime and assign it to the result object for sorting
-                result.pubdatesort = $(this).find("time").attr("datetime");
+                // Isolate the value of the publication datetime and assign it to the result object for sorting - deprecated after redesign
+                result.pubdatesort = new Date(Date.now());
                 // Create a new Article using the `result` object built from scraping
                 db.Article.create(result)
                     .then(function (dbArticle) {
