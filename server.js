@@ -4,6 +4,7 @@ var exphbs = require('express-handlebars');
 var bodyParser = require('body-parser');
 var logger = require("morgan");
 var mongoose = require("mongoose");
+require('dotenv').config();
 
 // If deployed, use the deployed database. Otherwise use the local newsScraperDB database
 var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/newsScraperDB";
@@ -34,7 +35,7 @@ app.set("view engine", "handlebars");
 require("./routes/api-routes.js")(app);
 
 // Connect to the Mongo DB using flags to avoid deprecated methods
-mongoose.connect(MONGODB_URI, { useNewUrlParser: true, useCreateIndex: true });
+mongoose.connect(MONGODB_URI, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true });
 
 app.listen(PORT, function () {
     console.log("App listening on PORT " + PORT);
